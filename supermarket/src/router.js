@@ -1,11 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import ElementUI from 'element-ui'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
+      path:'/login',
+      name:'login',
+      component:() => import('./views/Login/login.vue')
+    },
+    {
+    
       path: '/',
       name: 'index',
       component: ()=>import('./views/index/index.vue'),
@@ -53,7 +60,5 @@ export default new Router({
           component:()=>import('./views/SalesCharts/SalesCharts.vue')
         },
       ]
-    },
-    
-  ]
-})
+    }]
+  })
