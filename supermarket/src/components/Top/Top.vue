@@ -4,7 +4,7 @@
             <el-col :span="12">
                 <div  class="title">
                     <i class="el-icon-menu"></i>
-                    华联超市管理系统
+                    永辉超市管理系统
                 </div>
             </el-col>
             <el-col :span="12">
@@ -37,8 +37,8 @@
 export default {
     data () {
         return {
-            username: "李寻欢",
-            avatarUrl: './ChMkJ1ZqiwKIaEjLAADpfbysx-0AAGB-gJMzUsAAOmV268.jpg'
+            username: "boos",
+            avatarUrl: 'http://127.0.0.1:8080/002.jpg'
         }
     }
 }
