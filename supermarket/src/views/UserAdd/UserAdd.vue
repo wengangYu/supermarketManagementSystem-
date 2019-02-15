@@ -6,21 +6,27 @@
                 <span>添加账号</span>
             </div>
             <div class="user-add">
-        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model.number="ruleForm2.username"></el-input>
-          </el-form-item>
-        <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="ruleForm2.pass"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass">
-          <el-input type="password" v-model="ruleForm2.checkPass"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+              <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" size='small'>
+                <el-form-item label="用户名" prop="username">
+                  <el-input v-model.number="ruleForm2.username"></el-input>
+                </el-form-item>
+              <el-form-item label="密码" prop="pass">
+                <el-input type="password" v-model="ruleForm2.pass"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码" prop="checkPass">
+                <el-input type="password" v-model="ruleForm2.checkPass"></el-input>
+              </el-form-item>
+                <el-form-item label="选择用户组">
+                  <el-select v-model="usergroup.group" placeholder="请选择用户组" style='width:260px'>
+                    <el-option label="普通用户" value="普通用户"></el-option>
+                    <el-option label="超级管理员" value="超级管理员"></el-option>
+                  </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+              </el-form-item>
+              </el-form>
+             </div>
         </el-card>
     </div>
     
@@ -66,6 +72,9 @@ export default {
         pass: [{ validator: validatePass, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
         username: [{ validator: checkUsername, trigger: "blur" }]
+      },
+      usergroup:{
+        group:''
       }
     };
   },
