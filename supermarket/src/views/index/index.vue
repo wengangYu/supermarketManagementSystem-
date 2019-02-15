@@ -67,7 +67,7 @@ export default {
       // 头尾
       .el-header,
       .el-footer {
-        background-color: #b3c0d1;
+        background-color: #dbdedf;
         color: #333;
         text-align: center;
         line-height: 60px;
@@ -83,4 +83,5 @@ export default {
     }
   }
 }
+
 </style>
