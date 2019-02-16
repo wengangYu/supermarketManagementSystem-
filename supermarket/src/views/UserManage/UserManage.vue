@@ -11,18 +11,13 @@
       type="selection"
       width="55">
     </el-table-column>
-            <el-table-column label="创建日期" width="180">
-            <template slot-scope="scope">
-                <i class="el-icon-time"></i>
-                <span style="margin-left: 10px">{{ scope.row.ctime }}</span>
-            </template>
-            </el-table-column>
+            
             <el-table-column label="账号" width="180">
               <template slot-scope="scope">
                   <el-popover trigger="hover" placement="top">
-                  <p>用户名: {{ scope.row.name }}</p>
+                  <p>用户名: {{ scope.row.username }}</p>
                   <div slot="reference" class="name-wrapper">
-                      <span>{{ scope.row.name }}</span>
+                      <span>{{ scope.row.username }}</span>
                   </div>
                   </el-popover>
               </template>
@@ -31,15 +26,21 @@
             <el-table-column label="用户组" width="180">
               <template slot-scope="scope">
                   <el-popover trigger="hover" placement="top">
-                  <p>用户名: {{ scope.row.group }}</p>
+                  <p>用户名: {{ scope.row.usergroup }}</p>
                   <div slot="reference" class="name-wrapper">
-                      <el-tag size="medium">{{ scope.row.group }}</el-tag>
+                      <el-tag size="medium">{{ scope.row.usergroup }}</el-tag>
                   </div>
                   </el-popover>
               </template>
             </el-table-column>
+            <el-table-column label="创建日期" width="240" >
+              <template slot-scope="scope">
+                  <i class="el-icon-time"></i>
+                  <span style="margin-left: 10px">{{ scope.row.ctime | moment}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
-            <template slot-scope="scope">
+              <template slot-scope="scope">
                 <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -47,7 +48,7 @@
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
+              </template>
             </el-table-column>
         </el-table>
         </el-card>
@@ -58,31 +59,32 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          ctime: "2016-05-02",
-          name: "余汶刚",
-          group: "普通用户"
-        },
-        {
-          ctime: "2016-05-04",
-          name: "王小二",
-          group: "超级管理员"
-        },
-        {
-          ctime: "2016-05-01",
-          name: "王小虎",
-          group: "超级管理员"
-        },
-        {
-          ctime: "2016-05-03",
-          name: "王小虎",
-          group: "普通用户"
-        }
-      ]
+      tableData: [],  
     };
   },
+  //生命周期-created 组件加载完成
+  created() {
+    this.showaccountlist()
+  },
+  
+  
   methods: {
+    //时间过滤
+    
+    //调用刷新列表
+    showaccountlist(){
+      this.axios.get('http://127.0.0.1:666/account/accountlist')
+      .then(response =>{
+        this.tableData = response.data
+        // var ctime = response.data.map(ctime => response.data.ctime)
+        // console.log(ctime)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    },
+
+
     handleEdit(index, row) {
       console.log(index, row);
     },

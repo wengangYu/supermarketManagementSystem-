@@ -3,7 +3,8 @@ var router = express.Router();
 //引入mysql连接
 var connection = require('./connect')
 
-/* GET home page. */
+//账号添加
+
 router.post('/accountadd',(req,res)=> {
   //解决跨域问题
   res.header('Access-Control-Allow-Origin','*')
@@ -18,4 +19,17 @@ router.post('/accountadd',(req,res)=> {
     }else{res.send({'error_code':1,'msg':'插入数据失败'})}
   })
 });
+
+//账号列表
+router.get('/accountlist',(req,res)=>{
+  //解决跨域问题
+  res.header('Access-Control-Allow-Origin','*')
+  //sql 语句
+  var sqlStr = `select * from account`
+  //执行sql语句
+  connection.query(sqlStr,(err,data)=>{
+    if(err) throw err
+    res.send(data)
+  })
+})
 module.exports = router;
