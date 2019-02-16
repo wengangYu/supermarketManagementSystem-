@@ -35,5 +35,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 //监听端口
-app.listen(666,console.log('服务器启动成功地址:http:127.0.0.1:666'))
+app.listen(666,()=>{console.log('服务器启动成功地址:http:127.0.0.1:666')})
 module.exports = app;
