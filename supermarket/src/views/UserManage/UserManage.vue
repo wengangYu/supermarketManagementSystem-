@@ -14,7 +14,7 @@
             <el-table-column label="创建日期" width="180">
             <template slot-scope="scope">
                 <i class="el-icon-time"></i>
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                <span style="margin-left: 10px">{{ scope.row.ctime }}</span>
             </template>
             </el-table-column>
             <el-table-column label="账号" width="180">
@@ -60,22 +60,22 @@ export default {
     return {
       tableData: [
         {
-          date: "2016-05-02",
+          ctime: "2016-05-02",
           name: "余汶刚",
           group: "普通用户"
         },
         {
-          date: "2016-05-04",
+          ctime: "2016-05-04",
           name: "王小二",
           group: "超级管理员"
         },
         {
-          date: "2016-05-01",
+          ctime: "2016-05-01",
           name: "王小虎",
           group: "超级管理员"
         },
         {
-          date: "2016-05-03",
+          ctime: "2016-05-03",
           name: "王小虎",
           group: "普通用户"
         }
