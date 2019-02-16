@@ -82,9 +82,18 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          alert("添加成功!");
+          // 获取用户输入的要新增的账号数据，用一个参数对象保存
+          let params = {
+            username: this.ruleForm2.username,
+            pass: this.ruleForm2.pass,
+            checkPass: this.ruleForm2.checkPass
+          }
+          console.log(params);
+          // 跳转到账号管理界面
+          this.$router.push('/usermanage')
         } else {
-          console.log("error submit!!");
+          console.log("error 添加失败!!");
           return false;
         }
       });

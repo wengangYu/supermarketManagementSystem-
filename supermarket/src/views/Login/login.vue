@@ -84,8 +84,15 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           alert("验证通过");
+          // 前端验证通过 发送ajax 把账号 和 密码 发送给后端 验证 用户名和密码是否存在
+          // 收集账号和密码（获取用户输入的账号和密码 发送给前端）
+          let name = this.ruleForm.name;
+          let pwd = this.ruleForm.pwd;
+          console.log(name, pwd);
+          // 通过路由跳转 跳转到后端系统首页
+          this.$router.push('/');
         } else {
-          console.log("error submit!!");
+          console.log("error 验证失败!!");
           return false;
         }
       });
