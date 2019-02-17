@@ -119,6 +119,14 @@ body {
   right: 0;
   margin: auto;
   border-radius: 4px;
+  .loginfrom{
+    .el-button--primary{
+      color: #fff;
+      background-color: #41b883;
+      border-color: #41b883;
+      width: 100%;
+    }
+  }
 }
 
 .loginwarper {
@@ -139,12 +147,9 @@ body {
   background-size: cover;
   position: relative;
 }
-.el-button--primary {
-  color: #fff;
-  background-color: #41b883;
-  border-color: #41b883;
-  width: 100%;
-}
+// .el-button--primary {
+  
+// }
 .logo {
   width: 100%;
   text-align: center;
