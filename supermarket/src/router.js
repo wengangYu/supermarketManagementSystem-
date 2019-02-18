@@ -6,12 +6,6 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    
-    //   path: '/',
-    //   name: 'index',
-    //   redirect: '/login' ,
-    // },
     {
       path:'/login', 
       component: login,
@@ -20,7 +14,6 @@ export default new Router({
   {
     path: '/',
     name: 'index',
-    redirect: '/login' ,
     component: ()=>import('./views/index/index.vue'),
     children:[
       // 默认子组件

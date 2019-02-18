@@ -119,7 +119,7 @@ export default {
               console.log(err);
             });
         } else {
-          console.log("error submit!!");
+          console.log("error 添加失败!!");
           return false;
         }
       });

@@ -13,7 +13,6 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55"></el-table-column>
-
         <el-table-column label="账号" width="180">
           <template slot-scope="scope">
             <el-popover trigger="hover" placement="top">
@@ -79,6 +78,11 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 批量删除 -->
+      <div style="margin-top: 20px">
+        <el-button @click="batchDelete">批量删除</el-button>
+        <el-button @click="cancelSelect()">取消选择</el-button>
+      </div>
       <!-- 分页 -->
       <div class="block">
         <span class="demonstration"></span>
@@ -92,6 +96,8 @@
           :total="total"
         ></el-pagination>
       </div>
+      
+      <!-- fenye -->
     </el-card>
   </div>
   <!-- 编辑-嵌套弹出表单 -->
@@ -126,15 +132,16 @@ export default {
       currentPage: 1, //当前页
       pageSize: 3, //每页条数
       //表格数据
-      tableData: [],
-      dialogFormVisible: false,
       //验证
+      tableData: [], // 用户账号表格数据
+      dialogFormVisible: false, // 控制修改模态框的显示和隐藏
       ruleForm: {
+        // 修改表单数据
         username: "",
         group: "",
         id: 0
       },
-      //验证规则
+      selectedAccount: [], // 被选中的账号数据
       rules: {
         username: [{ validator: checkUsername, trigger: "blur" }],
         group: [{ validator: checkgroup, trigger: "blur" }]
@@ -300,25 +307,67 @@ export default {
             message: "已取消删除"
           });
         });
-      // //获取要删除的id
-      // let id = row.id
-      // //发送idgei 后端
-      // this.axios.get(`http://127.0.0.1:666/account/accountdel?id=${id}`)
-      // .then(response=>{
-      //   let{error_code,msg} = response.data
-      //   if (error_code === 0){
-      //     this.$message({
-      //         message: msg,
-      //         type: "success"
-      //     })
-      //   }this.showaccountlist()
-      // })
-      // .catch(err=>{
-      //   console.log(err)
-      // })
     },
+    // 批量删除
+    batchDelete() {
+      // 获取选中的 id
+      let selectedId = this.selectedAccount.map(a => a.id);
+      //什么都没选;
+      if (!selectedId.length) {
+        this.$message.error("至少选择一个！");
+        return;
+      }
+      // 确认删除框
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          // 发送Ajax请求 把要删除的账号id发给后端
+          this.axios
+            .get(`http://127.0.0.1:666/account/batchDelete`, {
+              params: {
+                selectedId
+              }
+            })
+            .then(response => {
+              // 接收错误码和提示信息
+              let { error_code, reason } = response.data;
+              // 判断
+              if (error_code === 0) {
+                // 成功 弹出提示
+                this.$message({
+                  type: "success",
+                  message: reason
+                });
+                // 刷新列表
+                this.showaccountlist();
+              } else {
+                // 失败 弹出提示
+                this.$message.error(reason);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          // 弹出取消删除的提示
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    // 取消选择
+    cancelSelect(rows) {
+      this.$refs.multipleTable.clearSelection();
+    },
+
+    // 多选框状态改变触发
     handleSelectionChange(val) {
-      this.multipleSelection = val;
+      this.selectedAccount = val;
     }
   }
 };
