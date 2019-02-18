@@ -8,17 +8,21 @@
         <!-- 修改密码表单 -->
         <div class="edit-pwd">
           <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" size='small'>
-                <el-form-item label="用户名" prop="username">
-                  <el-input v-model.number="ruleForm2.username"></el-input>
-                </el-form-item>
-              <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm2.pass"></el-input>
+                <!-- 原密码 -->
+                <el-form-item label="原密码" prop="Oldpwd">
+                <el-input type="password" v-model="ruleForm2.Oldpwd"></el-input>
               </el-form-item>
-              <el-form-item label="确认密码" prop="checkPass">
-                <el-input type="password" v-model="ruleForm2.checkPass"></el-input>
+              <!-- 新密码 -->
+              <el-form-item label="新密码" prop="Newpwd">
+                <el-input type="password" v-model="ruleForm2.Newpwd"></el-input>
+              </el-form-item>
+              <!-- 确认密码 -->
+              <el-form-item label="确认密码" prop="checkPwd">
+                <el-input type="password" v-model="ruleForm2.checkPwd"></el-input>
                 </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm2')">确定</el-button>
+                <el-button @click="resetForm('passwordModifyForm')">重置</el-button>
               </el-form-item>
           </el-form>
         </div>
@@ -29,44 +33,44 @@
 <script>
 export default {
   data() {
-    var checkUsername = (rule, value, callback) => {
-      var reg = /^[a-zA-Z][a-zA-Z0-9]{3,15}$/;
-      if (value === "") {
-        callback(new Error("请输入用户名"));
-      } else if (reg.test(value) === false) {
-        callback(new Error("请输入正确格式的用户名"));
-      }
-      callback();
-    };
+    // 密码验证
     var validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请输入密码"));
+        callback(new Error("请输入新密码"));
       } else {
-        if (this.ruleForm2.checkPass !== "") {
-          this.$refs.ruleForm2.validateField("checkPass");
+        if (this.ruleForm2.checkPwd !== "") {
+          this.$refs.ruleForm2.validateField("checkPwd");
         }
         callback();
       }
     };
+    // 确认新密码验证
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm2.pass) {
+        callback(new Error("请再次输入新密码"));
+      } else if (value !== this.ruleForm2.Newpwd) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
+    // 旧密码验证
+    const checkOldPwd=(rule, value, callback)=>{
+      // 获取当前用户登录的账户
+      let username=window.localStorage.getItem("username");
+      // // 发送Ajax给后端，把旧的密码发送给后端，对比密码是否一致
+      // this.axios.get(`http://127.0.0.1/account/checkOldPwd?oldPwd=${}`)
+    };
     return {
       ruleForm2: {
-        pass: "",
-        checkPass: "",
-        username: ""
+        Oldpwd: "",
+        Newpwd: "",
+        checkPwd: ""
       },
       rules2: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        username: [{ validator: checkUsername, trigger: "blur" }]
+        Oldpwd: [{ validator: checkOldPwd, trigger: "blur" }],
+        Newpwd: [{ validator: validatePass, trigger: "blur" }],
+        checkPwd: [{ validator: validatePass2, trigger: "blur" }]
       },
     };
   },
@@ -80,6 +84,11 @@ export default {
           return false;
         }
       });
+    },
+    // 点击重置按钮 触发这个函数
+    resetForm(formName) {
+      // this.$refs.loginForm.resetFields() 获取整个表单组件 调用重置方法
+      this.$refs[formName].resetFields();
     }
   }
 };

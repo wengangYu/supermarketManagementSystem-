@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     user     : 'root', // 数据库用户名
     password : 'root', // 数据库密码
     port: '3306',  // 端口号 默认就是3306 可以不写
-    database: 'sm' , // 数据库的名字,
+    database: 'user' , // 数据库的名字,
     useConnectionPooling: true,
 });
 
