@@ -113,7 +113,7 @@ export default {
       if (value === "") {
         callback(new Error("请输入用户名"));
       } else if (reg.test(value) === false) {
-        callback(new Error("请输入正确格式的用户名"));
+        callback(new Error("请输入4-15位用户名"));
       }
       callback();
     };
@@ -165,15 +165,12 @@ export default {
       //保存每页条数
       this.pageSize = val;
       this.showaccountlist();
-      // console.log(`每页 ${val} 条`);
     },
 
     handleCurrentChange(val) {
       //保存当前页给绑定的数据
       this.currentPage = val;
       this.showaccountlist();
-      // console.log(`当前页: ${val}`);
-      // this.axios.get(`http://127.0.0.1:666/account/pages?page=${val},size=`)
     },
     //调用刷新列表
     showaccountlist() {
@@ -209,7 +206,7 @@ export default {
         });
     },
 
-    //账号回显
+    //账号编辑回显
     handleEdit(index, row) {
       //获取当前点击的用户id
       let currentid = row.id;

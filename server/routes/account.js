@@ -4,7 +4,7 @@ var router = express.Router();
 var connection = require('./connect')
 
 //账号添加
-
+// console.log(router)
 router.post('/accountadd', (req, res) => {
   //解决跨域问题
   res.header('Access-Control-Allow-Origin', '*')

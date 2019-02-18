@@ -23,6 +23,40 @@ Vue.filter('moment', function (value, formatString) {
   return moment(value).format(formatString); // value可以是普通日期 20170723
   // return moment.unix(value).format(formatString); // 这是时间戳转时间
 });
+
+//全局路由配置--路由前置守卫
+
+router.beforeEach((to, from, next) => {
+  //获取当前请求的路径
+  let toPath = to.path
+  console.log(toPath)
+  //登陆页面路径
+  let loginpath = '/login'
+  console.log(loginpath)
+  //首先获取token看是否存在
+  let usertoken = window.localStorage.getItem('token')
+  console.log(usertoken)
+  //如果当前路径不是登陆页面就去检查token,如果token存在继续,否则跳转到登陆页面
+  if(toPath!==loginpath){
+    if(usertoken){
+      next()
+    }else{
+      next({
+        path:loginpath
+      })
+    }
+  }else{
+    next()
+  }
+  //默认跳转到根
+  // next({
+  //   path:loginpath
+  // })
+
+})
+
+// 获取当前请求的路径
+
 new Vue({
   router,
   render: h => h(App)

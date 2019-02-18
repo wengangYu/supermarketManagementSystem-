@@ -41,28 +41,41 @@ export default {
       if (value === "") {
         callback(new Error("请输入用户名"));
       } else if (reg.test(value) === false) {
-        callback(new Error("请输入正确格式的用户名"));
+        callback(new Error("请输入4-15位用户名"));
       }
       callback();
     };
+    // var validatePass = (rule, value, callback) => {
+    //   var reg=/^[a-zA-Z0-9]{4,10}$/;
+    //   if (value === "") {
+    //     callback(new Error("请输入4-10位的密码"));
+    //   } else {
+    //     if (this.ruleForm.checkPass !== "") {
+    //       this.$refs.ruleForm.validateField("checkPass");
+    //     }
+    //     callback();
+    //   }
+    // };
     var validatePass = (rule, value, callback) => {
+      var reg=/^[a-zA-Z0-9]{4,10}$/;
       if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
-        }
-        callback();
+        callback(new Error("请输入4-10位的密码"));
+      } else if(reg.test(value)===false){
+        callback(new Error('请输入4-10位的密码'))
       }
+      callback();
     };
     var validatePass2 = (rule, value, callback) => {
+      var reg=/^[a-zA-Z0-9]{4,10}$/;
       if (value === "") {
-        callback(new Error("请再次输入密码"));
+        callback(new Error("请输入4-10位的密码"));
+        
       } else if (value !== this.ruleForm.pass) {
         callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
+      } else if(reg.test(value)===false){
+        callback(new Error('请输入4-10位的密码'))
+      }else{callback();}
+      
     };
     //选择用户组
     var checkgroup = (rule,value,callback) =>{
