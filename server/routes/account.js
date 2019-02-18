@@ -11,8 +11,8 @@ router.post('/accountadd',(req,res)=> {
   //接受前端发送的数据
   let{username,password,group} = req.body;
   console.log(username,password,group);
-  sqlStr = `insert into account(username,password,usergroup) values('${username}','${password}','${group}')`
-
+  let sqlStr = `insert into account(username,password,usergroup) values('${username}','${password}','${group}')`
+  console.log(sqlStr)
   connection.query(sqlStr,(err,data)=>{
     if (err) throw err
     if(data.affectedRows>0){
@@ -32,6 +32,27 @@ router.get('/accountlist',(req,res)=>{
     if(err) throw err
     res.send(data)
   })
+  
+})
+
+ //分页
+router.get('/pages',(req,res)=>{
+  //解决跨域问题
+ res.header('Access-Control-Allow-Origin', '*')
+ //接收前端
+ let page = req.query.page
+ let size = req.query.size
+//  console.log(page,size)
+ //构造查询公式
+ let n = (page-1)*size
+ //构造sql 
+ let sqlStr = `select * from account limit ${n},${size}`
+ console.log(sqlStr)
+ //执行sql
+ connection.query(sqlStr,(err,data)=>{
+   if(err) throw err
+   res.send(data)
+ })
 })
 
 //账号回显
@@ -77,6 +98,8 @@ router.post('/accounteditconfirm',(req,res)=>{
 //     res.send({'error_code':0,'msg':'删除账号成功'})
 //   })
 // })
+
+
 router.get('/accountdel',(req,res)=>{
   //解决跨域问题
   res.header('Access-Control-Allow-Origin', '*')
@@ -101,4 +124,7 @@ router.get('/accountdel',(req,res)=>{
      }
    })
  })
+
+
+
 module.exports = router;
