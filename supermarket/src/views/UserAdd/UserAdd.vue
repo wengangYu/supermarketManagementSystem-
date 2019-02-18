@@ -151,4 +151,13 @@ export default {
   height: 40px;
   width: 100%;
 }
+.index{
+  .account-add{
+    .user-add{
+      .el-button--primary{
+        width: 100%;
+      }
+    }
+  }
+}
 </style>
