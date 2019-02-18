@@ -3,8 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+//账号请求
 var account = require('./routes/account');
+//登陆请求
+var login = require('./routes/login')
 
 var app = express();
 
@@ -19,8 +21,10 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+//使用路由
 app.use('/account', account);
+
+app.use('/login',login);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
