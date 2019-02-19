@@ -3,11 +3,19 @@ var router = express.Router();
 //引入mysql连接
 var connection = require('./connect')
 
+// 统一设置响应头 解决跨域问题
+router.all('*', (req, res, next) => {
+  // 设置响应头 解决跨域(目前最主流的方式)
+  // 允许的域
+  res.header('Access-Control-Allow-Origin', '*');
+  // 允许的请求头
+  res.header("Access-Control-Allow-Headers", "authorization");
+  next();
+})
+
 //账号添加
 // console.log(router)
 router.post('/accountadd', (req, res) => {
-  //解决跨域问题
-  res.header('Access-Control-Allow-Origin', '*')
   //接受前端发送的数据
   let{username,password,group} = req.body;
   console.log(username,password,group);
@@ -21,37 +29,48 @@ router.post('/accountadd', (req, res) => {
   })
 });
 
-//账号列表
-router.get('/accountlist', (req, res) => {
-  //解决跨域问题
-  res.header('Access-Control-Allow-Origin', '*')
-  //sql 语句
-  var sqlStr = `select * from account`
-  //执行sql语句
-  connection.query(sqlStr, (err, data) => {
-    if (err) throw err
-    res.send(data)
-  })
+//账号列表 直接使用分页代码.
+// router.get('/accountlist', (req, res) => {
+//   //解决跨域问题
+//   res.header('Access-Control-Allow-Origin', '*')
+//   //sql 语句
+//   var sqlStr = `select * from account`
+//   //执行sql语句
+//   connection.query(sqlStr, (err, data) => {
+//     if (err) throw err
+//     res.send(data)
+//   })
   
-})
+// })
 
  //分页
 router.get('/pages',(req,res)=>{
-  //解决跨域问题
- res.header('Access-Control-Allow-Origin', '*')
  //接收前端
  let page = req.query.page
  let size = req.query.size
 //  console.log(page,size)
- //构造查询公式
- let n = (page-1)*size
+ // 默认值
+  size = size ? size : 20;
+  page = page ? page : 1;
  //构造sql 
- let sqlStr = `select * from account limit ${n},${size}`
+ let sqlStr = `select * from account order by ctime desc`;
+ 
  console.log(sqlStr)
  //执行sql
  connection.query(sqlStr,(err,data)=>{
    if(err) throw err
-   res.send(data)
+   let total =data.length
+
+   //构造查询公式
+   let n = (page-1)*size
+   // 拼接分页的sql语句
+   sqlStr += ` limit ${n}, ${size}`;
+   connection.query(sqlStr,(err,data)=>{
+     if (err) throw err
+     res.send({
+       total,data
+     })
+   })
  })
 });
 

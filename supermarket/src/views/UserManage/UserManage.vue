@@ -90,7 +90,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[3, 5, 10, 20]"
+          :page-sizes="[5, 10, 15, 20]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
@@ -172,38 +172,43 @@ export default {
       this.currentPage = val;
       this.showaccountlist();
     },
-    //调用刷新列表
+    //调用刷新列表(和分页写在一起的)
     showaccountlist() {
       let pageSize = this.pageSize;
       let currentPage = this.currentPage;
-      console.log(`当前页:${currentPage},条数:${pageSize}`);
-      this.axios
-        .get("http://127.0.0.1:666/account/accountlist")
-        .then(response => {
-          this.tableData = response.data;
-          //数据库 数据总数
-          this.total = this.tableData.length;
-          //将页码和数量axios发给后端
-          this.axios.get(`http://127.0.0.1:666/account/pages?page=${currentPage}&size=${pageSize}`)
+      
+      // this.req
+      //   .get("/account/accountlist")
+      //   .then(response => {
+      //     this.tableData = response;
+      //     //数据库 数据总数
+      //     this.total = this.tableData.length;
+      //     //将页码和数量axios发给后端
+          let parms = {page:currentPage,size:pageSize}
+          console.log(parms)
+          this.req.get('/account/pages',parms)
           .then(response=>{
             //接收到的data赋值给tabledata
-            this.tableData = response.data
+            let {total,data} = response
+            this.tableData = data
+            this.total = total
+            
             //重新刷新网页
             //如果删除了当前页的数据需要跳转到上一页,但需要排除第一页
-            if(response.data.length==0 && currentPage!==1){
+            if(response.length==0 && currentPage!==1){
               //跳转
               this.currentPage -=1;
-              this.showaccountlist()
+              // this.showaccountlist()
             }
           })
           //捕获错误
           .catch(err=>{
             console.log(err)
           })
-        })
-        .catch(err => {
-          console.log(err);
-        });
+        // })
+        // .catch(err => {
+        //   console.log(err);
+        // });
     },
 
     //账号编辑回显
@@ -211,12 +216,12 @@ export default {
       //获取当前点击的用户id
       let currentid = row.id;
       //将点击的用户id 通过axios发给后端
-      this.axios
-        .get(`http://127.0.0.1:666/account/accountedit?id=${currentid}`)
+      this.req
+        .get(`/account/accountedit`,{id:currentid})
         .then(response => {
-          this.ruleForm.username = response.data.username;
-          this.ruleForm.group = response.data.usergroup;
-          this.ruleForm.id = response.data.id;
+          this.ruleForm.username = response.username;
+          this.ruleForm.group = response.usergroup;
+          this.ruleForm.id = response.id;
         })
         .catch(err => {
           console.log(err);
@@ -239,13 +244,12 @@ export default {
             usergroup: usergroup
           };
           //post 请求发给后台
-          this.axios
+          this.req
             .post(
-              "http://127.0.0.1:666/account/accounteditconfirm",
-              qs.stringify(parms)
+              "/account/accounteditconfirm",parms
             )
             .then(response => {
-              let { error_code, msg } = response.data;
+              let { error_code, msg } = response;
               if (error_code === 0) {
                 this.$message({
                   message: msg,
@@ -278,11 +282,11 @@ export default {
       })
         .then(() => {
           let id = row.id;
-          this.axios
-            .get(`http://127.0.0.1:666/account/accountdel?id=${id}`)
+          this.req
+            .get(`/account/accountdel`,{id:id})
             .then(response => {
               // 接收后端返回的错误码 和 提示信息
-              let { error_code, msg } = response.data;
+              let { error_code, msg } = response
               if (error_code === 0) {
                 this.$message({
                   type: "success",
@@ -322,15 +326,15 @@ export default {
       })
         .then(() => {
           // 发送Ajax请求 把要删除的账号id发给后端
-          this.axios
-            .get(`http://127.0.0.1:666/account/batchDelete`, {
-              params: {
+          this.req
+            .get(`/account/batchDelete`, 
+               {
                 selectedId
               }
-            })
+            )
             .then(response => {
               // 接收错误码和提示信息
-              let { error_code, reason } = response.data;
+              let { error_code, reason } = response;
               // 判断
               if (error_code === 0) {
                 // 成功 弹出提示

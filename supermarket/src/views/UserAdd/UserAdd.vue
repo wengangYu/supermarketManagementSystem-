@@ -113,14 +113,14 @@ export default {
           };
 
           // 使用axios发送数据给后端
-          this.axios
+          this.req
             .post(
-              "http://127.0.0.1:666/account/accountadd",
-              qs.stringify(params)
+              "/account/accountadd",
+            params
             )
             .then(response => {
               //解构变量
-              let { error_code, msg } = response.data;
+              let { error_code, msg } = response;
               this.$message({
                 message: msg,
                 type: "success"

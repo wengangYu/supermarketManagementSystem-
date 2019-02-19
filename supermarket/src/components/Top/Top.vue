@@ -34,8 +34,6 @@
     </div>
 </template>
 <script>
-const jwt = require('jsonwebtoken');
-console.log(jwt)
 //1
 let usertoken = window.localStorage.getItem('token')
 //2
@@ -48,9 +46,6 @@ export default {
         }
     },
     //生命周期函数
-    created(){
-        this.axios.get
-    }
 }
 </script>
 <style lang="less">

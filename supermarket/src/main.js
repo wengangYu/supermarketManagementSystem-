@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 //引入axios
-import axios from 'axios'
+// import axios from 'axios'
 import moment from 'moment/moment'
 // 引入顶级组件
 import App from './App.vue'
@@ -10,8 +10,12 @@ import router from './router'
 import ElementUI from 'element-ui';
 // 组件样式
 import 'element-ui/lib/theme-chalk/index.css';
+
+//引入api 
+import req from '@/API/request';
+
 //把axios挂在vue的原型上
-Vue.prototype.axios = axios;
+Vue.prototype.req = req;
 //阻止生产提示
 Vue.config.productionTip = false
 // 注册elementui
@@ -29,13 +33,13 @@ Vue.filter('moment', function (value, formatString) {
 router.beforeEach((to, from, next) => {
   //获取当前请求的路径
   let toPath = to.path
-  console.log(toPath)
+ 
   //登陆页面路径
   let loginpath = '/login'
-  console.log(loginpath)
+ 
   //首先获取token看是否存在
   let usertoken = window.localStorage.getItem('token')
-  console.log(usertoken)
+
   //如果当前路径不是登陆页面就去检查token,如果token存在继续,否则跳转到登陆页面
   if(toPath!==loginpath){
     if(usertoken){

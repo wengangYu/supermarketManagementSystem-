@@ -75,10 +75,6 @@
   </div>
 </template>
 <script>
-//引入qs
-import qs from "qs";
-//解构message
-// import {message} from 'element-ui'
 export default {
   data() {
     // 检测用户名
@@ -125,11 +121,11 @@ export default {
           let pwd = this.ruleForm.pwd;
           let parms = { username: name, password: pwd };
           //发送axios请求讲账号密码发给后台 进行查询
-          this.axios
-            .post("http://127.0.0.1:666/login", qs.stringify(parms))
+          this.req
+            .post("/login", parms)
             .then(response => {
-              console.log(response.data);
-              let { username, password, msg, usergroup, token } = response.data;
+              console.log(response);
+              let { username, password, msg, usergroup, token } = response;
               //进行比较
               if (name === username && pwd === password) {
                 this.$message({
