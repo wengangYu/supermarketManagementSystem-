@@ -154,4 +154,48 @@ router.get('/batchDelete',(req,res)=>{
     }
   })
 })
+
+// 验证旧密码是否正确
+router.get('/checkOldPwd',(req,res)=>{
+  //解决跨域问题
+  res.header('Access-Control-Allow-Origin', '*')
+  // 接收旧密码 
+  let {oldPwd,username}=req.query;
+  console.log(req.query);
+  // 构造sql
+  const sqlStr = `select * from account where username='${username}' and password='${oldPwd}'`;
+console.log(sqlStr);
+
+  // 执行sql
+  connection.query(sqlStr,(err,data)=>{
+    if(err) throw err;
+    if(data.length){
+      res.send({"error_code": 0, "reason":"旧密码正确!"});
+    }else{
+      res.send({"error_code": 1, "reason":"旧密码错误!"});
+    }
+  })
+})
+
+// 保存新密码
+router.post('/savenewpwd',(req,res)=>{
+  //解决跨域问题
+  res.header('Access-Control-Allow-Origin', '*')
+    // 接收参数
+  let {username, Oldpwd, Newpwd} = req.body;
+  // 构造sql
+  const sqlStr=`update account set password='${Newpwd}' where username='${username}' and password='${Oldpwd}'`;
+  // 执行sql
+  connection.query(sqlStr,(err,data)=>{
+    if(err)throw err;
+    if(data.affectedRows>0){
+       // 成功
+       res.send({"error_code": 0, "reason":"密码修改成功!请重新登录!"})
+    }else{
+       // 成功
+       res.send({"error_code": 1, "reason":"密码修改失败"})
+    }
+  })
+
+})
 module.exports = router;
