@@ -1,4 +1,4 @@
-<template>
+ff<template>
     <div class="top">
         <el-row>
             <el-col :span="12">
@@ -12,13 +12,13 @@
                     <el-row>
                         <el-col :span="18">
                             欢迎您! 
-                            <el-dropdown>
+                            <el-dropdown @command="handleCommand">
                             <span class="username el-dropdown-link">
                                 {{ username }}<i class="el-icon-arrow-down el-icon--right"></i>
                             </span>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item>个人中心</el-dropdown-item>
-                                <el-dropdown-item>退出</el-dropdown-item>
+                                <el-dropdown-item command="personal">个人中心</el-dropdown-item>
+                                <el-dropdown-item command="logout">退出</el-dropdown-item>
                             </el-dropdown-menu>
                             </el-dropdown>
                         </el-col>
@@ -45,7 +45,28 @@ export default {
             avatarUrl: 'http://127.0.0.1:8080/002.jpg'
         }
     },
+    methods: {
+        handleCommand(command){
+            // 如果点退出
+            if(command==="logout"){
+                // 清除token
+                window.localStorage.removeItem("token");
+                // 提示
+                this.$message({
+                    type:'success',
+                    message:'wellcome back'
+                })
+                setTimeout(()=>{
+                    // 跳转到登录界面
+                    this.$router.push('.login')
+                },1000)
+            }
+        }
+    },
     //生命周期函数
+    created(){
+        this.username = window.localStorage.getItem('username');
+    }
 }
 </script>
 <style lang="less">

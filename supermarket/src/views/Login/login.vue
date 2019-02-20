@@ -91,7 +91,7 @@ export default {
 
     //检测密码
     var checkPwd = (rule, value, callback) => {
-      var reg = /^[a-zA-Z0-9]{4,10}$/;
+      var reg = /^[a-zA-Z0-9]{3,10}$/;
       if (value === "") {
         callback(new Error("请输入4-10位的密码"));
       } else if (reg.test(value) === false) {

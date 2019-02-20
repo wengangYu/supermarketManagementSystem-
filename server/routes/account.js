@@ -76,8 +76,6 @@ router.get('/pages',(req,res)=>{
 
 // 删除账号
 router.get('/accountdel',(req,res)=>{
- //解决跨域问题
- res.header('Access-Control-Allow-Origin', '*')
 //  接收id
  let {id} = req.query;
  // 根据id 执行删除
@@ -102,7 +100,6 @@ router.get('/accountdel',(req,res)=>{
 
 //账号回显
 router.get('/accountedit',(req,res)=>{
-  res.header('Access-Control-Allow-Origin','*')
   let currentid = req.query.id
   //根据id 去数据库查询
   let sqlStr = `select * from account where id=${currentid}`
@@ -115,7 +112,6 @@ router.get('/accountedit',(req,res)=>{
 
 //账号编辑确认
 router.post('/accounteditconfirm',(req,res)=>{
-  res.header('Access-Control-Allow-Origin','*')
   let{id,username,usergroup} = req.body
   //sql 语句
   let sqlStr = `update account set username='${username}',usergroup='${usergroup}' where id=${id}`
@@ -133,8 +129,6 @@ router.post('/accounteditconfirm',(req,res)=>{
 
 //删除账号
 router.get('/accountdel',(req,res)=>{
-  //解决跨域问题
-  res.header('Access-Control-Allow-Origin', '*')
  //  接收id
   let {id} = req.query;
   // 根据id 执行删除
@@ -159,8 +153,6 @@ router.get('/accountdel',(req,res)=>{
 
 //  批量删除
 router.get('/batchDelete',(req,res)=>{
-  //解决跨域问题
-  res.header('Access-Control-Allow-Origin', '*')
   let {selectedId} =req.query;
   // 构造sql语句
   const sqlStr = `delete from account where id in (${selectedId})`;
@@ -172,5 +164,45 @@ router.get('/batchDelete',(req,res)=>{
       res.send({"error_code": 1, "reason":"批量删除失败"})
     }
   })
+})
+
+// 验证旧密码是否正确
+router.get('/checkOldPwd',(req,res)=>{
+  // 接收旧密码 
+  let {oldPwd,username}=req.query;
+  console.log(req.query);
+  // 构造sql
+  const sqlStr = `select * from account where username='${username}' and password='${oldPwd}'`;
+console.log(sqlStr);
+
+  // 执行sql
+  connection.query(sqlStr,(err,data)=>{
+    if(err) throw err;
+    if(data.length){
+      res.send({"error_code": 0, "reason":"旧密码正确!"});
+    }else{
+      res.send({"error_code": 1, "reason":"旧密码错误!"});
+    }
+  })
+})
+
+// 保存新密码
+router.post('/savenewpwd',(req,res)=>{
+    // 接收参数
+  let {username, Oldpwd, Newpwd} = req.body;
+  // 构造sql
+  const sqlStr=`update account set password='${Newpwd}' where username='${username}' and password='${Oldpwd}'`;
+  // 执行sql
+  connection.query(sqlStr,(err,data)=>{
+    if(err)throw err;
+    if(data.affectedRows>0){
+       // 成功
+       res.send({"error_code": 0, "reason":"密码修改成功!请重新登录!"})
+    }else{
+       // 成功
+       res.send({"error_code": 1, "reason":"密码修改失败"})
+    }
+  })
+
 })
 module.exports = router;

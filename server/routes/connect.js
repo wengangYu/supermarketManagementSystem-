@@ -9,7 +9,8 @@ const connection = mysql.createConnection({
     password : 'root', // 数据库密码
     port: '3306',  // 端口号 默认就是3306 可以不写
     database: 'sm' , // 数据库的名字,
-    useConnectionPooling: true,
+    // useConnectionPooling: true,
+    useConnectionPooling: true
 });
 
 //执行连接方法
